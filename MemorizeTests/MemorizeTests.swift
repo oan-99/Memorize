@@ -2,7 +2,7 @@
 //  MemorizeTests.swift
 //  MemorizeTests
 //
-//  Created by On Dev on 25/08/2023.
+//  
 //
 
 import XCTest
