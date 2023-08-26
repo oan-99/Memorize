@@ -7,36 +7,48 @@
 import SwiftUI
 
 struct ContentView: View {
+    let backEmojis : Array<String> =
+    ["🐤","🐜","🪲","🫎","🐡","🐞","🪱","🦎","🦟","🦆","🦩","🦄","🦋","🐺"]
+    
     var body: some View {
-        VStack {
-            CardView(faceDown: false)
-            CardView()
-            CardView()
+        VStack{
+            Cards
             Spacer()
             CardButtons()
         }
         .padding()
+            
     }
-}
-
-struct CardView: View {
-    @State var faceDown : Bool = true
-    var body: some View {
-        let base = RoundedRectangle(cornerRadius: 5)
-        ZStack{
-            if(faceDown){
-                base.fill(.orange)
-            }
-            else {
-                base.fill(.white)
-                base.stroke(.orange)
-                Text("🦩")
+    
+    var Cards: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
+            ForEach(0..<backEmojis.count, id: \.self){ index in
+                CardView(cardEmoji: backEmojis[index], faceDown: false)
             }
         }
-        .padding()
-        
     }
+    
+    struct CardView: View {
+        let cardEmoji : String
+        @State var faceDown : Bool = true
+        var body: some View {
+            let base = RoundedRectangle(cornerRadius: 5)
+            ZStack{
+                if(faceDown){
+                    base.fill(.orange)
+                }
+                else {
+                    base.fill(.white)
+                    base.stroke(.orange)
+                    Text(cardEmoji)
+                }
+            }
+            
+        }
+    }
+    
 }
+
 
 struct CardButtons: View {
     var body: some View {
