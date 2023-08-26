@@ -19,7 +19,6 @@ struct ContentView: View {
             Spacer()
             CardButtons
         }
-        
         .padding()
             
     }
@@ -35,53 +34,58 @@ struct ContentView: View {
         .foregroundColor(.orange)
     }
     
-    struct CardView: View {
-        let cardEmoji : String
-        @State var faceDown : Bool = true
-        var body: some View {
-            let base = RoundedRectangle(cornerRadius: 5)
-            ZStack{
-                Group {
-                    base.fill(.white)
-                    base.stroke(.orange)
-                    Text(cardEmoji)
-                }
-                .opacity(faceDown ? 0 : 1)
-                base.fill().opacity(faceDown ? 1: 0)
-            }
-            .onTapGesture {
-                faceDown = !faceDown
-            }
-            
-        }
-    }
-    
-    
     var CardButtons: some View {
         
         HStack{
-            Button(action: {
-                if cardCount < backEmojis.count {
-                    cardCount += 1
-                }
-            }, label: {
-                Image(systemName: "rectangle.stack.badge.plus.fill")
-                    .font(.title)
-            })
+            RemoveCard
             Spacer()
-            Button(action: {
-                if cardCount > 1 {
-                    cardCount -= 1
-                }
-            }, label: {
-                Image(systemName: "rectangle.stack.badge.minus.fill")
-                    .font(.title)
-            })
+            AddCard
         }
+        .font(.title)
         .padding()
         
     }
     
+    func CardCreator (by offset: Int, symbol: String) -> some View{
+        Button(action:{
+            cardCount += offset
+        }, label:{
+            Image(systemName: symbol)
+        })
+        .disabled(cardCount + offset < 1 || cardCount + offset > backEmojis.count )
+    }
+    
+    var AddCard: some View {
+        CardCreator(by: 1, symbol: "rectangle.stack.badge.plus.fill")
+    }
+    
+    var RemoveCard: some View {
+        CardCreator(by: -1, symbol: "rectangle.stack.badge.minus.fill")
+    }
+    
+    
+    
+}
+
+struct CardView: View {
+    let cardEmoji : String
+    @State var faceDown : Bool = true
+    var body: some View {
+        let base = RoundedRectangle(cornerRadius: 12)
+        ZStack{
+            Group {
+                base.fill(.white)
+                base.strokeBorder(lineWidth: 2)
+                Text(cardEmoji).font(.largeTitle)
+            }
+            .opacity(faceDown ? 0 : 1)
+            base.fill().opacity(faceDown ? 1: 0)
+        }
+        .onTapGesture {
+            faceDown = !faceDown
+        }
+        
+    }
 }
 
 
